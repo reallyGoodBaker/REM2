@@ -1,15 +1,46 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { systemDb } from './database'
 
-function createWindow(): void {
+function initWinSize() {
+    const { promise, resolve, reject } = Promise.withResolvers<{width: number, height: number}>()
+    const { width, height } = screen.getPrimaryDisplay().bounds
+
+    systemDb.findOne({
+        key: 'system.size'
+    }, (err, doc) => {
+        if (err) {
+            return reject(err)
+        }
+
+        if (!doc) {
+            systemDb.insert(doc = {
+                key: 'system.size',
+                value: {
+                    width: Math.floor(width * 0.8),
+                    height: Math.floor(height * 0.8)
+                }
+            })
+        }
+
+        resolve(doc.value)
+    })
+
+    return promise
+}
+
+async function createWindow() {
+    const { width, height } = await initWinSize()
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 900,
-        height: 670,
+        width,
+        height,
         show: false,
         autoHideMenuBar: true,
+        roundedCorners: true,
+        frame: false,
         ...(process.platform === 'linux' ? { icon } : {}),
         webPreferences: {
             preload: join(__dirname, '../preload/index.js'),
@@ -33,6 +64,8 @@ function createWindow(): void {
     } else {
         mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     }
+
+    onWindowInit(mainWindow)
 }
 
 // This method will be called when Electron has finished
@@ -72,3 +105,18 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+function onWindowInit(win: BrowserWindow) {
+    win.on('resize', () => {
+        const { width, height } = win.getBounds()
+
+        systemDb.update({
+            key: 'system.size'
+        }, {
+            $set: {
+                value: {
+                    width, height
+                }
+            }
+        })
+    })
+}

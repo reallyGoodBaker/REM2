@@ -31,6 +31,7 @@
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
+    "@types/nedb": "^1.8.16",
     "@types/node": "^20.14.8",
     "electron": "^31.0.2",
     "electron-builder": "^24.13.3",

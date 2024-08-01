@@ -33,6 +33,9 @@ importers:
       '@electron-toolkit/tsconfig':
         specifier: ^1.0.1
         version: 1.0.1(@types/node@20.14.13)
+      '@types/nedb':
+        specifier: ^1.8.16
+        version: 1.8.16
       '@types/node':
         specifier: ^20.14.8
         version: 20.14.13
@@ -578,6 +581,9 @@ packages:
 
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
+
+  '@types/nedb@1.8.16':
+    resolution: {integrity: sha512-ND+uzwAZk7ZI9byOvHGOcZe2R9XUcLF698yDJKn00trFvh+GaemkX3gQKCSKtObjDpv8Uuou+k8v4x4scPr4TA==}
 
   '@types/node@20.14.13':
     resolution: {integrity: sha512-+bHoGiZb8UiQ0+WEtmph2IWQCjIqg8MDZMAV+ppRRhUZnquF5mQkP/9vpSwJClEiSM/C7fZZExPzfU0vJTyp8w==}
@@ -2641,6 +2647,10 @@ snapshots:
       '@types/node': 20.14.13
 
   '@types/ms@0.7.34': {}
+
+  '@types/nedb@1.8.16':
+    dependencies:
+      '@types/node': 20.14.13
 
   '@types/node@20.14.13':
     dependencies:
